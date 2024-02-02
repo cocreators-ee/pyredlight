@@ -53,7 +53,7 @@ jobs:
           git add pyproject.toml
           git commit -m "Updated version to ${TAG}"
 
-          git push
+          git push origin HEAD:main
         env:
           BOT_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
         if: success()
