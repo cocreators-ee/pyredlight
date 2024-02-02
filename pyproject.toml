@@ -1,0 +1,30 @@
+[tool.poetry]
+name = "pyredlight"
+version = "0.1.0"
+description = "Redis transaction based rate limiter"
+authors = ["Janne Enberg <janne.enberg@lietu.net>"]
+license = "BSD-3-Clause"
+readme = "README.md"
+homepage = "https://github.com/cocreators-ee/pyredlight/"
+repository = "https://github.com/cocreators-ee/pyredlight/"
+documentation = "https://github.com/cocreators-ee/pyredlight/"
+keywords = ["rate", "limit", "limiter", "limiting", "async"]
+packages = [
+    { include = "pyredlight/*.py" },
+]
+
+[tool.poetry.dependencies]
+python = ">=3.8,<4"
+redis = {extras = ["hiredis"], version = "^5.0.1"}
+
+[tool.poetry.dev-dependencies]
+pytest = "^7.2.1"
+pytest-asyncio = "^0.20.3"
+pytest-watch = "^4.2.0"
+
+[tool.poetry.group.dev.dependencies]
+fakeredis = "^2.21.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "fastapi-example"
+version = "0.1.0"
+description = ""
+authors = ["Janne Enberg <janne.enberg@lietu.net>"]
+packages = [{include = "example_app"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+pyredlight = { path = "..", develop = true }
+fastapi = "^0.109.0"
+uvicorn = "^0.27.0.post1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
