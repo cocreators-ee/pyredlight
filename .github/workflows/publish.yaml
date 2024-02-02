@@ -53,7 +53,7 @@ jobs:
           git add pyproject.toml
           git commit -m "Updated version to ${TAG}"
 
-          git push https://${GITHUB_ACTOR}:${TOKEN}@github.com/${GITHUB_REPOSITORY}.git main
+          git push https://${GITHUB_ACTOR}:${TOKEN}@github.com/${GITHUB_REPOSITORY}.git HEAD:main
         env:
           TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BOT_NAME: github-actions[bot]
