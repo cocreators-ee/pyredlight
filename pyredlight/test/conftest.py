@@ -1,5 +1,6 @@
-import pytest
 import fakeredis
+import pytest
+
 from pyredlight import set_redis
 
 

@@ -32,6 +32,7 @@ async def main():
     for _ in range(10):
         print(await handle_request({"client_ip": "127.0.0.1"}))
 
+
 if __name__ == "__main__":
     set_redis(redis.from_url("redis://your.redis.server"))
     asyncio.run(main())

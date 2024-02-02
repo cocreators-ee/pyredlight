@@ -1,4 +1,5 @@
 from typing import Optional
+
 import redis.asyncio as redis
 
 _REDIS_CLIENT: Optional[redis.Redis] = None

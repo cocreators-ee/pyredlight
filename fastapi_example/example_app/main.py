@@ -1,11 +1,10 @@
-from fastapi import FastAPI, Request, APIRouter, Depends
+import redis.asyncio as redis
+from fastapi import APIRouter, Depends, FastAPI, Request
+from settings import REDIS_URL
 from starlette.responses import JSONResponse
 
 from pyredlight import limit, set_redis
 from pyredlight.fastapi import make_depends
-from settings import REDIS_URL
-import redis.asyncio as redis
-
 
 router = APIRouter()
 
@@ -39,8 +38,12 @@ async def rate_limit_headers(request: Request, call_next):
     response = await call_next(request)
     rate_limit_remaining = request.scope.get("rate_limit_remaining", None)
     if rate_limit_remaining is not None:
-        response.headers["X-Rate-Limit-Remains"] = str(request.scope["rate_limit_remaining"])
-        response.headers["X-Rate-Limit-Expires"] = str(request.scope["rate_limit_expires"])
+        response.headers["X-Rate-Limit-Remains"] = str(
+            request.scope["rate_limit_remaining"]
+        )
+        response.headers["X-Rate-Limit-Expires"] = str(
+            request.scope["rate_limit_expires"]
+        )
     return response
 
 
