@@ -47,7 +47,7 @@ jobs:
       - name: Update version 🔼
         run: |
           TAG=$(git tag --points-at HEAD | head -n1)
-          git config --global user.name "${{ env.CI_COMMIT_AUTHOR }}"
+          git config --global user.name "GitHub"
           git config --global user.email "${BOT_EMAIL}"
 
           git add pyproject.toml
