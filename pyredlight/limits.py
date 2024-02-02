@@ -1,13 +1,10 @@
 import re
 from dataclasses import dataclass
-from typing import TypeAlias
 
 from pyredlight.redis import get_redis
 
 GLOBAL_PREFIX = "pyredlight"
 LIMIT_TEST = re.compile("[0-9]+/[0-9]+[hms]")
-
-LimiterResponseType: TypeAlias = tuple[bool, int, int]
 
 
 @dataclass
@@ -16,7 +13,12 @@ class Limiter:
     seconds: int
     prefix: str
 
-    async def is_ok(self, key: str) -> LimiterResponseType:
+    async def is_ok(self, key: str) -> tuple[bool, int, int]:
+        """
+        Check if the key should be allowed through the limiter
+        :param key:
+        :return: ok, requests remaining, time until limit resets
+        """
         redis = get_redis()
         real_key = f"{GLOBAL_PREFIX}_{self.prefix}_{key}"
 
