@@ -36,5 +36,3 @@ async def test_parse_limit():
     for err in errors:
         with pytest.raises(ValueError):
             limit(err)
-
-    raise NotImplementedError
