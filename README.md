@@ -39,6 +39,8 @@ poetry add pyredlight
 
 If you want to test the examples make sure you replace `redis://your.redis.server` with an actual connect string.
 
+Limits can be defined using the format `{requests}/{time}[hms]`, so `100/10s` = 100 requests / 10 seconds, `60/1m` = 60 requests / minute, `5000/6h` = 5000 requests / 6 hours.
+
 Small example of how you can use this library (also in [example.py](./example.py), test
 with `poetry install && poetry run python example.py`):
 
