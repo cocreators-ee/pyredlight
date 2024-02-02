@@ -47,15 +47,13 @@ jobs:
       - name: Update version 🔼
         run: |
           TAG=$(git tag --points-at HEAD | head -n1)
-          git config --local user.name "${BOT_NAME}"
-          git config --local user.email "${BOT_EMAIL}"
+          git config --global user.name "${{ env.CI_COMMIT_AUTHOR }}"
+          git config --global user.email "${BOT_EMAIL}"
 
           git add pyproject.toml
           git commit -m "Updated version to ${TAG}"
 
-          git push https://${GITHUB_ACTOR}:${TOKEN}@github.com/${GITHUB_REPOSITORY}.git HEAD:main
+          git push
         env:
-          TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          BOT_NAME: github-actions[bot]
           BOT_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
         if: success()
