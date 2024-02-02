@@ -1,5 +1,6 @@
 import re
 from dataclasses import dataclass
+from typing import Tuple
 
 from pyredlight.redis import get_redis
 
@@ -13,7 +14,7 @@ class Limiter:
     seconds: int
     prefix: str
 
-    async def is_ok(self, key: str) -> tuple[bool, int, int]:
+    async def is_ok(self, key: str) -> Tuple[bool, int, int]:
         """
         Check if the key should be allowed through the limiter
         :param key:
