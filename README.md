@@ -149,8 +149,11 @@ For local development, make sure you install [pre-commit](https://pre-commit.com
 ```bash
 pre-commit install
 poetry install
-poetry run pytest-watch  # Hit Ctrl+C when done with your changes
-poetry run python readme_example.py
+poetry run pytest
+poetry run python example.py
+
+cd fastapi_example
+poetry run python example.py
 ```
 
 ## License
