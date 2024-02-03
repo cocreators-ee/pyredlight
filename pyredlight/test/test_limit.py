@@ -1,11 +1,13 @@
+import secrets
+
 import pytest
 
-from pyredlight import limit
+from pyredlight import limit, merge_limits
 
 
 async def test_limit():
     limiter = limit("1/10s")
-    key = "key"
+    key = "key_" + secrets.token_urlsafe(16)
 
     ok, _, _ = await limiter.is_ok(key)
     assert ok
@@ -48,3 +50,28 @@ async def test_parse_limit():
     for err in errors:
         with pytest.raises(ValueError):
             limit(err)
+
+
+async def test_merge_limit():
+    first = limit("1/10s")
+    second = limit("1/50s")
+    merged = merge_limits([first, second])
+
+    key = "merge_test_key_" + secrets.token_urlsafe(16)
+
+    ok, _, _ = await merged.is_ok(key)
+    assert ok
+
+    ok, _, _ = await merged.is_ok(key)
+    assert not ok
+
+    await first.clear(key)
+
+    ok, _, _ = await merged.is_ok(key)
+    assert not ok
+
+    await first.clear(key)
+    await second.clear(key)
+
+    ok, _, _ = await merged.is_ok(key)
+    assert ok

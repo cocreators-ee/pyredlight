@@ -24,7 +24,6 @@ the expiration time for the request window.
 
 Also contains utilities and examples for convenient use with FastAPI.
 
-
 ## Installation
 
 It's a Python library, what do you expect?
@@ -39,7 +38,8 @@ poetry add pyredlight
 
 If you want to test the examples make sure you replace `redis://your.redis.server` with an actual connect string.
 
-Limits can be defined using the format `{requests}/{time}[hms]`, so `100/10s` = 100 requests / 10 seconds, `60/1m` = 60 requests / minute, `5000/6h` = 5000 requests / 6 hours.
+Limits can be defined using the format `{requests}/{time}[hms]`, so `100/10s` = 100 requests / 10 seconds, `60/1m` = 60
+requests / minute, `5000/6h` = 5000 requests / 6 hours.
 
 Small example of how you can use this library (also in [example.py](./example.py), test
 with `poetry install && poetry run python example.py`):
@@ -141,9 +141,29 @@ async def setup():
 
 For the rare cases you might want to reset a limit, you can also `.clear(key)` instead of `.is_ok(key)`.
 
+You may also occasionally find it useful to merge limits, to e.g. check `20/1s` and `50/1m` at the same time, for that
+there's a helper:
+
+```python
+from pyredlight import limit, merge_limits
+
+per_second_limit = limit("20/1s")
+per_minute_limit = limit("50/1m")
+combined_limit = merge_limits([per_second_limit, per_minute_limit])
+
+
+async def example():
+  ok, remaining, expires = await combined_limit.is_ok("key")
+```
+
+The return value from `merge_limits` implements the same interface as `limit`, so you can also `.clear()` keys - which
+will then be cleared from all the limits.
+
 ## Performance
 
-You should really not expect much extra latency beyond a single network RTT to your Redis server for each check, as long as your Redis server is capable of handling the requests. With a very simple Redis server in the same LAN as [benchmark.py](./benchmark.py) it seems each call is taking approx 110-150μsec.
+You should really not expect much extra latency beyond a single network RTT to your Redis server for each check, as long
+as your Redis server is capable of handling the requests. With a very simple Redis server in the same LAN
+as [benchmark.py](./benchmark.py) it seems each call is taking approx 110-150μsec.
 
 ## Development
 

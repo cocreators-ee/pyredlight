@@ -1,6 +1,7 @@
+import asyncio
 import re
 from dataclasses import dataclass
-from typing import Tuple
+from typing import List, Tuple
 
 from pyredlight.redis import get_redis
 
@@ -42,6 +43,41 @@ class Limiter:
         await redis.delete(real_key)
 
 
+class MergedLimiter:
+    limiters: List[Limiter] = None
+
+    def __init__(self, limiters: List[Limiter]):
+        self.limiters = limiters
+
+    async def is_ok(self, key):
+        results = await asyncio.gather(
+            *[limiter.is_ok(key) for limiter in self.limiters]
+        )
+
+        ok = True
+        remaining = None
+        ttl = None
+
+        for r in results:
+            _ok, _rem, _ttl = r
+            if not _ok:
+                ok = False
+
+            if ttl is None or _rem < remaining:
+                remaining = _rem
+                ttl = _ttl
+
+            # If we're at 0 requests allowed we want the largest time we need to wait for
+            if ttl == 0 and _ttl == 0:
+                if _rem > remaining:
+                    remaining = _rem
+
+        return ok, remaining, ttl
+
+    async def clear(self, key):
+        await asyncio.gather(*[limiter.clear(key) for limiter in self.limiters])
+
+
 def parse_duration(duration_def) -> int:
     last = duration_def[-1]
     if last == "h":
@@ -63,3 +99,7 @@ def limit(limit_def: str) -> Limiter:
         raise ValueError(f"Invalid duration {duration_str}")
 
     return Limiter(count=count, seconds=seconds, prefix=limit_def)
+
+
+def merge_limits(limits: List[Limiter]) -> MergedLimiter:
+    return MergedLimiter(limits)
