@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pyredlight"
-version = "0.1.7"
+version = "0.2.0"
 description = "Redis transaction based rate limiter"
 authors = ["Janne Enberg <janne.enberg@lietu.net>"]
 license = "BSD-3-Clause"
