@@ -4,13 +4,25 @@ from pyredlight import limit
 
 
 async def test_limit():
-    limiter = limit("1/1s")
+    limiter = limit("1/10s")
+    key = "key"
 
-    ok, _, _ = await limiter.is_ok("key")
+    ok, _, _ = await limiter.is_ok(key)
     assert ok
 
-    ok, _, _ = await limiter.is_ok("key")
+    ok, _, _ = await limiter.is_ok(key)
     assert not ok
+
+    await limiter.clear(key)
+
+    ok, _, _ = await limiter.is_ok(key)
+    assert ok
+
+    ok, _, _ = await limiter.is_ok(key)
+    assert not ok
+
+    ok, _, _ = await limiter.is_ok(f"{key}2")
+    assert ok
 
 
 async def test_parse_limit():

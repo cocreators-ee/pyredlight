@@ -136,8 +136,14 @@ async def rate_limit_headers(request: Request, call_next):
 
 @app.on_event("startup")
 async def setup():
-  set_redis(redis.from_url("redis://127.0.0.1"))
+  set_redis(redis.from_url("redis://your.redis.server"))
 ```
+
+For the rare cases you might want to reset a limit, you can also `.clear(key)` instead of `.is_ok(key)`.
+
+## Performance
+
+You should really not expect much extra latency beyond a single network RTT to your Redis server for each check, as long as your Redis server is capable of handling the requests. With a very simple Redis server in the same LAN as [benchmark.py](./benchmark.py) it seems each call is taking approx 110-150μsec.
 
 ## Development
 
@@ -151,7 +157,7 @@ For local development, make sure you install [pre-commit](https://pre-commit.com
 ```bash
 pre-commit install
 poetry install
-poetry run pytest
+poetry run pytest-watch
 poetry run python example.py
 
 cd fastapi_example
