@@ -35,7 +35,7 @@ async def main():
 
     print(f"Not limited: {not_limited_time:.6f}s")
     print(f"Limited: {limited_time:.6f}s")
-    print(f"Diff: {diff}s / {TEST_ROUNDS} calls")
+    print(f"Diff: {diff:.6f}s / {TEST_ROUNDS:,} calls")
     print(f"Per call: {diff_per_call:.6f}s")
 
 
