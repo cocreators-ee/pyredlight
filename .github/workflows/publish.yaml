@@ -1,5 +1,3 @@
-# TODO: Make this extract the version number from the tag and update `pyproject.toml` with it
-
 name: Build and upload to PyPI
 
 on:
