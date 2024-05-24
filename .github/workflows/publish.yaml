@@ -40,7 +40,7 @@ jobs:
           sed -Ei 's/^version = "[^"]+"/version = "'${TAG}'"/' pyproject.toml
           poetry build
 
-      - name: Publish to PyPi 🚀
+      - name: Publish to PyPI 🚀
         uses: pypa/gh-action-pypi-publish@release/v1
 
       - name: Update version 🔼
