@@ -11,7 +11,7 @@ async def default_get_key(request: Request):
 def make_depends(
     limiter: Limiter,
     get_key=default_get_key,
-    retry_after_header: bool = False,
+    retry_after_header: bool = True,
 ):
     async def _depends(request: Request, key=Depends(get_key)):
         ok, remaining, expires = await limiter.is_ok(key)
