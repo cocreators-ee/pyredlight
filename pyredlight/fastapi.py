@@ -18,13 +18,13 @@ def make_depends(
         request.scope["rate_limit_remaining"] = remaining
         request.scope["rate_limit_expires"] = expires
 
-        headers = None
-        if retry_after_header:
-            headers = {
-                "Retry-After": str(expires),
-            }
-
         if not ok:
+            headers = None
+            if retry_after_header:
+                headers = {
+                    "Retry-After": str(expires),
+                }
+
             raise HTTPException(
                 HTTP_429_TOO_MANY_REQUESTS,
                 "Rate limit exceeded",
