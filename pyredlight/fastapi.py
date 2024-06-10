@@ -1,7 +1,9 @@
+from typing import Union
+
 from fastapi import Depends, HTTPException, Request
 from starlette.status import HTTP_429_TOO_MANY_REQUESTS
 
-from pyredlight.limits import Limiter
+from pyredlight.limits import Limiter, MergedLimiter
 
 
 async def default_get_key(request: Request):
@@ -9,7 +11,7 @@ async def default_get_key(request: Request):
 
 
 def make_depends(
-    limiter: Limiter,
+    limiter: Union[Limiter, MergedLimiter],
     get_key=default_get_key,
     retry_after_header: bool = True,
 ):
